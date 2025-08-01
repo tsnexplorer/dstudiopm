@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ClientOnboarding from './ClientOnboarding';
 
 function TopNav({ current, setCurrent }) {
   const navItems = [
@@ -27,90 +28,6 @@ function TopNav({ current, setCurrent }) {
   );
 }
 
-function ClientOnboarding({ project, handleChange }) {
-  const required = (val) => !val ? "Required" : "";
-  return (
-    <form className="card-pro max-w-2xl mx-auto">
-      <h2 className="heading-pro mb-8"><span>👤</span>Client Onboarding</h2>
-      {/* Project Details Section */}
-      <div className="mb-6 pb-6 border-b border-blue-200">
-        <div className="mb-4">
-          <label className="block text-blue-700 font-medium mb-1" htmlFor="name">Project Name <span className="text-red-500">*</span></label>
-          <div className="relative">
-            <input id="name" name="name" className="input-pro pl-10" value={project.name} onChange={handleChange} required />
-            <span className="absolute left-3 top-3 text-blue-400">🏷️</span>
-          </div>
-          <span className="text-xs text-red-500">{required(project.name)}</span>
-        </div>
-        <div className="mb-4">
-          <label className="block text-blue-700 font-medium mb-1" htmlFor="client">Client Name <span className="text-red-500">*</span></label>
-          <div className="relative">
-            <input id="client" name="client" className="input-pro pl-10" value={project.client} onChange={handleChange} required />
-            <span className="absolute left-3 top-3 text-blue-400">🧑</span>
-          </div>
-          <span className="text-xs text-red-500">{required(project.client)}</span>
-        </div>
-        <div className="mb-4">
-          <label className="block text-blue-700 font-medium mb-1" htmlFor="address">Address</label>
-          <div className="relative">
-            <input id="address" name="address" className="input-pro pl-10" value={project.address || ''} onChange={handleChange} />
-            <span className="absolute left-3 top-3 text-blue-400">📍</span>
-          </div>
-          <span className="text-xs text-gray-400">Full site address</span>
-        </div>
-      </div>
-      {/* Project Scope Section */}
-      <div className="mb-6 pb-6 border-b border-blue-200">
-        <div className="mb-4">
-          <label className="block text-blue-700 font-medium mb-1" htmlFor="scope">Scope</label>
-          <div className="relative">
-            <input id="scope" name="scope" className="input-pro pl-10" value={project.scope || ''} onChange={handleChange} />
-            <span className="absolute left-3 top-3 text-blue-400">📦</span>
-          </div>
-          <span className="text-xs text-gray-400">E.g. Renovation, New Build, etc.</span>
-        </div>
-        <div className="mb-4">
-          <label className="block text-blue-700 font-medium mb-1" htmlFor="budget">Budget (₹)</label>
-          <div className="relative">
-            <input id="budget" name="budget" className="input-pro pl-10" value={project.budget} onChange={handleChange} />
-            <span className="absolute left-3 top-3 text-blue-400">💰</span>
-          </div>
-          <span className="text-xs text-gray-400">Estimated total budget</span>
-        </div>
-        <div className="mb-4">
-          <label className="block text-blue-700 font-medium mb-1" htmlFor="timeline">Timeline</label>
-          <div className="relative">
-            <input id="timeline" name="timeline" type="date" className="input-pro pl-10" value={project.timeline || ''} onChange={handleChange} />
-            <span className="absolute left-3 top-3 text-blue-400">📅</span>
-          </div>
-          <span className="text-xs text-gray-400">Expected completion date</span>
-        </div>
-      </div>
-      {/* Preferences & Notes Section */}
-      <div className="mb-6">
-        <div className="mb-4">
-          <label className="block text-blue-700 font-medium mb-1" htmlFor="preferences">Preferences</label>
-          <div className="relative">
-            <input id="preferences" name="preferences" className="input-pro pl-10" value={project.preferences || ''} onChange={handleChange} />
-            <span className="absolute left-3 top-3 text-blue-400">🎨</span>
-          </div>
-          <span className="text-xs text-gray-400">Design, style, color, etc.</span>
-        </div>
-        <div className="mb-4">
-          <label className="block text-blue-700 font-medium mb-1" htmlFor="notes">Notes</label>
-          <textarea id="notes" name="notes" className="input-pro pl-10" value={project.notes} onChange={handleChange}></textarea>
-          <span className="text-xs text-gray-400">Any additional info</span>
-        </div>
-      </div>
-      {/* Submit Button */}
-      <div className="flex justify-end mt-8">
-        <button type="submit" className="btn-rounded flex items-center gap-2">
-          <span>💾</span> Save
-        </button>
-      </div>
-    </form>
-  );
-}
 
 function TaskTracker({ newTask, handleTaskChange, addTask, handleAssignTask, tasks }) {
   return (
@@ -200,21 +117,27 @@ function AdminPanel({ handleAddProject, handleRemoveProject }) {
 }
 
 export default function ProjectDashboard() {
-  const [project, setProject] = useState({ name: '', client: '', budget: '', notes: '' });
+  const [clients, setClients] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ title: '', due: '', status: 'Pending' });
   const [currentPage, setCurrentPage] = useState('onboarding');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProject((prev) => ({ ...prev, [name]: value }));
+  // Client CRUD
+  const handleAddClient = (client) => {
+    setClients((prev) => [...prev, { ...client, id: Date.now().toString() }]);
+  };
+  const handleUpdateClient = (id, updated) => {
+    setClients((prev) => prev.map((c) => c.id === id ? { ...updated, id } : c));
+  };
+  const handleDeleteClient = (id) => {
+    setClients((prev) => prev.filter((c) => c.id !== id));
   };
 
+  // Task logic
   const handleTaskChange = (e) => {
     const { name, value } = e.target;
     setNewTask((prev) => ({ ...prev, [name]: value }));
   };
-
   const addTask = () => {
     setTasks((prev) => [...prev, newTask]);
     setNewTask({ title: '', due: '', status: 'Pending' });
@@ -222,37 +145,24 @@ export default function ProjectDashboard() {
 
   // MVP Feature Handlers
   const handleAutoReport = () => {
-    // TODO: Integrate OpenAI API for report generation
     alert('Weekly report generated! (AI-powered)');
   };
-
   const handleBudgetAlert = () => {
-    // TODO: Integrate budget tracking logic
-    alert(`Budget status: ₹${project.budget} (Planned)`);
+    alert('Budget status: (Planned)');
   };
-
   const handleVendorReminder = () => {
-    // TODO: Integrate messaging API for vendor reminders
     alert('Vendor reminder sent!');
   };
-
   const handlePhotoUpload = (e) => {
-    // TODO: Integrate Firebase/Cloudinary upload
     alert('Photo uploaded!');
   };
-
   const handleAddProject = () => {
-    // TODO: Admin panel logic to add project
     alert('Project added!');
   };
-
   const handleRemoveProject = () => {
-    // TODO: Admin panel logic to remove project
     alert('Project removed!');
   };
-
   const handleAssignTask = () => {
-    // TODO: Assign task to team (Trello/Notion API)
     alert('Task assigned!');
   };
 
@@ -262,7 +172,12 @@ export default function ProjectDashboard() {
       <TopNav current={currentPage} setCurrent={setCurrentPage} />
       <div className="mt-8">
         {currentPage === 'onboarding' && (
-          <ClientOnboarding project={project} handleChange={handleChange} />
+          <ClientOnboarding
+            clients={clients}
+            onAdd={handleAddClient}
+            onUpdate={handleUpdateClient}
+            onDelete={handleDeleteClient}
+          />
         )}
         {currentPage === 'tasks' && (
           <TaskTracker newTask={newTask} handleTaskChange={handleTaskChange} addTask={addTask} handleAssignTask={handleAssignTask} tasks={tasks} />
@@ -271,13 +186,13 @@ export default function ProjectDashboard() {
           <TimelineTracker />
         )}
         {currentPage === 'budget' && (
-          <BudgetDashboard project={project} handleBudgetAlert={handleBudgetAlert} />
+          <BudgetDashboard project={clients[0] || {}} handleBudgetAlert={handleBudgetAlert} />
         )}
         {currentPage === 'vendor' && (
-          <VendorCommsHub project={project} handleChange={handleChange} handleVendorReminder={handleVendorReminder} />
+          <VendorCommsHub project={clients[0] || {}} handleChange={() => {}} handleVendorReminder={handleVendorReminder} />
         )}
         {currentPage === 'photos' && (
-          <SitePhotoLogs project={project} handleChange={handleChange} handlePhotoUpload={handlePhotoUpload} />
+          <SitePhotoLogs project={clients[0] || {}} handleChange={() => {}} handlePhotoUpload={handlePhotoUpload} />
         )}
         {currentPage === 'ai' && (
           <AIAssistant handleAutoReport={handleAutoReport} handleBudgetAlert={handleBudgetAlert} handleVendorReminder={handleVendorReminder} />
