@@ -2,23 +2,24 @@ import React, { useState } from 'react';
 
 function TopNav({ current, setCurrent }) {
   const navItems = [
-    { key: 'onboarding', label: 'Client Onboarding' },
-    { key: 'tasks', label: 'Task Tracker' },
-    { key: 'timeline', label: 'Timeline Tracker' },
-    { key: 'budget', label: 'Budget Dashboard' },
-    { key: 'vendor', label: 'Vendor Comms Hub' },
-    { key: 'photos', label: 'Site Photo Logs' },
-    { key: 'ai', label: 'AI Assistant' },
-    { key: 'admin', label: 'Admin Panel' },
+    { key: 'onboarding', label: 'Client Onboarding', icon: '👤' },
+    { key: 'tasks', label: 'Task Tracker', icon: '✅' },
+    { key: 'timeline', label: 'Timeline Tracker', icon: '📊' },
+    { key: 'budget', label: 'Budget Dashboard', icon: '💰' },
+    { key: 'vendor', label: 'Vendor Comms Hub', icon: '🛒' },
+    { key: 'photos', label: 'Site Photo Logs', icon: '📷' },
+    { key: 'ai', label: 'AI Assistant', icon: '🤖' },
+    { key: 'admin', label: 'Admin Panel', icon: '🔒' },
   ];
   return (
-    <nav className="flex bg-gray-100 border-b mb-6">
+    <nav className="flex justify-center bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 shadow-lg border-b mb-8 rounded-b-xl py-2">
       {navItems.map(item => (
         <button
           key={item.key}
-          className={`px-4 py-3 font-semibold focus:outline-none ${current === item.key ? 'bg-blue-500 text-white' : 'text-gray-700'}`}
+          className={`mx-2 px-5 py-3 font-semibold rounded-t-xl transition-all duration-200 focus:outline-none text-lg shadow flex items-center gap-2 ${current === item.key ? 'bg-white text-blue-700 shadow-lg' : 'text-white hover:bg-white hover:text-blue-700'}`}
           onClick={() => setCurrent(item.key)}
         >
+          <span>{item.icon}</span>
           {item.label}
         </button>
       ))}
@@ -28,33 +29,35 @@ function TopNav({ current, setCurrent }) {
 
 function ClientOnboarding({ project, handleChange }) {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Client Onboarding</h2>
-      <input className="border p-2 w-full mb-2" placeholder="Project Name" name="name" value={project.name} onChange={handleChange}/>
-      <input className="border p-2 w-full mb-2" placeholder="Client Name" name="client" value={project.client} onChange={handleChange}/>
-      <input className="border p-2 w-full mb-2" placeholder="Address" name="address" value={project.address || ''} onChange={handleChange}/>
-      <input className="border p-2 w-full mb-2" placeholder="Scope" name="scope" value={project.scope || ''} onChange={handleChange}/>
-      <input className="border p-2 w-full mb-2" placeholder="Budget (₹)" name="budget" value={project.budget} onChange={handleChange}/>
-      <input className="border p-2 w-full mb-2" type="date" placeholder="Timeline" name="timeline" value={project.timeline || ''} onChange={handleChange}/>
-      <input className="border p-2 w-full mb-2" placeholder="Preferences" name="preferences" value={project.preferences || ''} onChange={handleChange}/>
-      <textarea className="border p-2 w-full mb-2" placeholder="Notes" name="notes" value={project.notes} onChange={handleChange}></textarea>
+    <div className="max-w-2xl mx-auto p-8 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-2xl shadow-xl border border-blue-200">
+      <h2 className="text-2xl font-bold mb-6 text-blue-700 flex items-center gap-2"><span>👤</span>Client Onboarding</h2>
+      <div className="grid grid-cols-1 gap-4">
+        <input className="border border-blue-300 p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 bg-white/80 placeholder-blue-400" placeholder="Project Name" name="name" value={project.name} onChange={handleChange}/>
+        <input className="border border-blue-300 p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 bg-white/80 placeholder-blue-400" placeholder="Client Name" name="client" value={project.client} onChange={handleChange}/>
+        <input className="border border-blue-300 p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 bg-white/80 placeholder-blue-400" placeholder="Address" name="address" value={project.address || ''} onChange={handleChange}/>
+        <input className="border border-blue-300 p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 bg-white/80 placeholder-blue-400" placeholder="Scope" name="scope" value={project.scope || ''} onChange={handleChange}/>
+        <input className="border border-blue-300 p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 bg-white/80 placeholder-blue-400" placeholder="Budget (₹)" name="budget" value={project.budget} onChange={handleChange}/>
+        <input className="border border-blue-300 p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 bg-white/80 placeholder-blue-400" type="date" placeholder="Timeline" name="timeline" value={project.timeline || ''} onChange={handleChange}/>
+        <input className="border border-blue-300 p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 bg-white/80 placeholder-blue-400" placeholder="Preferences" name="preferences" value={project.preferences || ''} onChange={handleChange}/>
+        <textarea className="border border-blue-300 p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 bg-white/80 placeholder-blue-400" placeholder="Notes" name="notes" value={project.notes} onChange={handleChange}></textarea>
+      </div>
     </div>
   );
 }
 
 function TaskTracker({ newTask, handleTaskChange, addTask, handleAssignTask, tasks }) {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Task Tracker</h2>
-      <input className="border p-2 w-full mb-2" placeholder="Task Title" name="title" value={newTask.title} onChange={handleTaskChange}/>
-      <input className="border p-2 w-full mb-2" type="date" name="due" value={newTask.due} onChange={handleTaskChange}/>
-      <select className="border p-2 w-full mb-2" name="status" value={newTask.status} onChange={handleTaskChange}>
+    <div className="max-w-2xl mx-auto p-6 bg-white/80 rounded-2xl shadow-xl border border-gray-200">
+      <h2 className="text-2xl font-bold mb-4 text-purple-700">Task Tracker</h2>
+      <input className="border p-2 w-full mb-2 rounded-lg focus:ring-2 focus:ring-purple-400" placeholder="Task Title" name="title" value={newTask.title} onChange={handleTaskChange}/>
+      <input className="border p-2 w-full mb-2 rounded-lg focus:ring-2 focus:ring-purple-400" type="date" name="due" value={newTask.due} onChange={handleTaskChange}/>
+      <select className="border p-2 w-full mb-2 rounded-lg focus:ring-2 focus:ring-purple-400" name="status" value={newTask.status} onChange={handleTaskChange}>
         <option>Pending</option>
         <option>In Progress</option>
         <option>Completed</option>
       </select>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={addTask}>Add Task</button>
-      <button className="bg-purple-500 text-white px-4 py-2 rounded ml-2" onClick={handleAssignTask}>Assign Task</button>
+      <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition-transform" onClick={addTask}>Add Task</button>
+      <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg ml-2 shadow hover:scale-105 transition-transform" onClick={handleAssignTask}>Assign Task</button>
       <ul className="list-disc pl-5 mt-2">
         {tasks.map((task, idx) => (
           <li key={idx}>{task.title} - {task.status} (Due: {task.due})</li>
@@ -66,8 +69,8 @@ function TaskTracker({ newTask, handleTaskChange, addTask, handleAssignTask, tas
 
 function TimelineTracker() {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">📊 Timeline Tracker (Gantt Chart)</h2>
+    <div className="max-w-2xl mx-auto p-6 bg-white/80 rounded-2xl shadow-xl border border-gray-200">
+      <h2 className="text-2xl font-bold mb-4 text-pink-700">📊 Timeline Tracker (Gantt Chart)</h2>
       <p className="text-gray-600">Timeline visualization will be displayed here.</p>
     </div>
   );
@@ -75,55 +78,55 @@ function TimelineTracker() {
 
 function BudgetDashboard({ project, handleBudgetAlert }) {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">💰 Budget Dashboard</h2>
+    <div className="max-w-2xl mx-auto p-6 bg-white/80 rounded-2xl shadow-xl border border-gray-200">
+      <h2 className="text-2xl font-bold mb-4 text-yellow-700">💰 Budget Dashboard</h2>
       <p>Planned Budget: ₹{project.budget}</p>
       <p>Actual Spend: ₹0 {/* TODO: Track actual spend */}</p>
-      <button className="bg-yellow-500 text-white px-4 py-2 rounded mb-2" onClick={handleBudgetAlert}>Check Budget Status</button>
+      <button className="bg-gradient-to-r from-yellow-400 to-pink-400 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition-transform mb-2" onClick={handleBudgetAlert}>Check Budget Status</button>
     </div>
   );
 }
 
 function VendorCommsHub({ project, handleChange, handleVendorReminder }) {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">🛒 Vendor Comms Hub</h2>
-      <input className="border p-2 w-full mb-2" placeholder="Vendor Name" name="vendor" value={project.vendor || ''} onChange={handleChange}/>
-      <input className="border p-2 w-full mb-2" placeholder="Order Details" name="order" value={project.order || ''} onChange={handleChange}/>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded mb-2" onClick={handleVendorReminder}>Send Reminder</button>
+    <div className="max-w-2xl mx-auto p-6 bg-white/80 rounded-2xl shadow-xl border border-gray-200">
+      <h2 className="text-2xl font-bold mb-4 text-blue-700">🛒 Vendor Comms Hub</h2>
+      <input className="border p-2 w-full mb-2 rounded-lg focus:ring-2 focus:ring-blue-400" placeholder="Vendor Name" name="vendor" value={project.vendor || ''} onChange={handleChange}/>
+      <input className="border p-2 w-full mb-2 rounded-lg focus:ring-2 focus:ring-blue-400" placeholder="Order Details" name="order" value={project.order || ''} onChange={handleChange}/>
+      <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition-transform mb-2" onClick={handleVendorReminder}>Send Reminder</button>
     </div>
   );
 }
 
 function SitePhotoLogs({ project, handleChange, handlePhotoUpload }) {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">📷 Site Photo Logs</h2>
-      <input className="border p-2 w-full mb-2" type="file" accept="image/*" onChange={handlePhotoUpload}/>
-      <input className="border p-2 w-full mb-2" placeholder="Tag" name="photoTag" value={project.photoTag || ''} onChange={handleChange}/>
-      <textarea className="border p-2 w-full mb-2" placeholder="Notes" name="photoNotes" value={project.photoNotes || ''} onChange={handleChange}></textarea>
+    <div className="max-w-2xl mx-auto p-6 bg-white/80 rounded-2xl shadow-xl border border-gray-200">
+      <h2 className="text-2xl font-bold mb-4 text-pink-700">📷 Site Photo Logs</h2>
+      <input className="border p-2 w-full mb-2 rounded-lg focus:ring-2 focus:ring-pink-400" type="file" accept="image/*" onChange={handlePhotoUpload}/>
+      <input className="border p-2 w-full mb-2 rounded-lg focus:ring-2 focus:ring-pink-400" placeholder="Tag" name="photoTag" value={project.photoTag || ''} onChange={handleChange}/>
+      <textarea className="border p-2 w-full mb-2 rounded-lg focus:ring-2 focus:ring-pink-400" placeholder="Notes" name="photoNotes" value={project.photoNotes || ''} onChange={handleChange}></textarea>
     </div>
   );
 }
 
 function AIAssistant({ handleAutoReport, handleBudgetAlert, handleVendorReminder }) {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">🤖 AI Assistant</h2>
-      <button className="bg-green-500 text-white px-4 py-2 rounded mb-2" onClick={handleAutoReport}>Generate Weekly Report</button>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded mb-2" onClick={handleAutoReport}>Generate Monthly Report</button>
-      <button className="bg-yellow-500 text-white px-4 py-2 rounded mb-2" onClick={handleBudgetAlert}>Check Budget Status</button>
-      <button className="bg-purple-500 text-white px-4 py-2 rounded mb-2" onClick={handleVendorReminder}>Send Vendor Reminder</button>
+    <div className="max-w-2xl mx-auto p-6 bg-white/80 rounded-2xl shadow-xl border border-gray-200">
+      <h2 className="text-2xl font-bold mb-4 text-purple-700">🤖 AI Assistant</h2>
+      <button className="bg-gradient-to-r from-green-400 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition-transform mb-2" onClick={handleAutoReport}>Generate Weekly Report</button>
+      <button className="bg-gradient-to-r from-blue-400 to-purple-400 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition-transform mb-2" onClick={handleAutoReport}>Generate Monthly Report</button>
+      <button className="bg-gradient-to-r from-yellow-400 to-pink-400 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition-transform mb-2" onClick={handleBudgetAlert}>Check Budget Status</button>
+      <button className="bg-gradient-to-r from-purple-400 to-pink-400 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition-transform mb-2" onClick={handleVendorReminder}>Send Vendor Reminder</button>
     </div>
   );
 }
 
 function AdminPanel({ handleAddProject, handleRemoveProject }) {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">🔒 Admin Panel</h2>
-      <button className="bg-green-700 text-white px-4 py-2 rounded mb-2" onClick={handleAddProject}>Add Project</button>
-      <button className="bg-red-700 text-white px-4 py-2 rounded mb-2" onClick={handleRemoveProject}>Remove Project</button>
+    <div className="max-w-2xl mx-auto p-6 bg-white/80 rounded-2xl shadow-xl border border-gray-200">
+      <h2 className="text-2xl font-bold mb-4 text-blue-900">🔒 Admin Panel</h2>
+      <button className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition-transform mb-2" onClick={handleAddProject}>Add Project</button>
+      <button className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition-transform mb-2" onClick={handleRemoveProject}>Remove Project</button>
       <p className="text-gray-600">Monitor performance and manage projects here.</p>
     </div>
   );
@@ -187,10 +190,10 @@ export default function ProjectDashboard() {
   };
 
   return (
-    <div className="font-sans min-h-screen bg-gray-50">
-      <h1 className="text-3xl font-bold mb-4 text-center pt-6">🚀 Designor Studio PM is Live!</h1>
+    <div className="font-sans min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100">
+      <h1 className="text-4xl font-extrabold mb-8 text-center pt-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 drop-shadow-lg">🚀 Designor Studio PM</h1>
       <TopNav current={currentPage} setCurrent={setCurrentPage} />
-      <div className="mt-6">
+      <div className="mt-8">
         {currentPage === 'onboarding' && (
           <ClientOnboarding project={project} handleChange={handleChange} />
         )}

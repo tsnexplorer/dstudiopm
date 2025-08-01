@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom theme for professional look */
+.btn-rounded {
+  @apply rounded-full px-6 py-2 font-semibold shadow-md transition-colors duration-200 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 text-white hover:from-blue-700 hover:via-purple-600 hover:to-pink-500 hover:shadow-lg;
+}
+
+.card-pro {
+  @apply bg-white/90 rounded-2xl shadow-xl border border-blue-200 p-8;
+}
+
+.input-pro {
+  @apply border border-blue-300 p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 bg-white/80 placeholder-blue-400;
+}
+
+.nav-pro {
+  @apply flex justify-center bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 shadow-lg border-b mb-8 rounded-b-xl py-2;
+}
+
+.heading-pro {
+  @apply text-2xl font-bold mb-6 text-blue-700 flex items-center gap-2;
+}
