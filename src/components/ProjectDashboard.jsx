@@ -210,9 +210,10 @@ export default function ProjectDashboard() {
 
   return (
     <div style={{ fontFamily: 'Roboto, Arial, sans-serif', minHeight: '100vh', background: 'linear-gradient(135deg, #232d1b 0%, #2e3b23 100%)' }}>
-      <Typography variant="h3" fontWeight={900} align="center" sx={{ pt: 8, mb: 6, background: 'linear-gradient(90deg, #708238, #b5c99a, #e1c16e)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 2px 8px #4b5320' }}>
-        🚀 Designor Studio PM
-      </Typography>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 48, marginBottom: 48 }}>
+        <img src="/logo-350x294.png" alt="Designor Studio Logo" style={{ width: 80, height: 67, marginBottom: 16, objectFit: 'contain' }} />
+        <img src="/title.png" alt="Designor Studio PM Title" style={{ maxWidth: 320, height: 'auto', marginBottom: 0 }} />
+      </div>
       <TopNav current={currentPage} setCurrent={setCurrentPage} />
       <div style={{ marginTop: 32 }}>
         {currentPage === 'onboarding' && (
