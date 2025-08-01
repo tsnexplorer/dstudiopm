@@ -328,14 +328,14 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
         <TableContainer component={Paper} elevation={1}>
           <Table>
             <TableHead>
-              <TableRow sx={{ backgroundColor: '#e0e7ff' }}>
-                <TableCell>Client Name</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Property Type</TableCell>
-                <TableCell>Project Type</TableCell>
-                <TableCell>Budget</TableCell>
-                <TableCell>Target Date</TableCell>
-                <TableCell>Actions</TableCell>
+            <TableRow sx={{ backgroundColor: 'background.accent' }}>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Client Name</TableCell>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Address</TableCell>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Property Type</TableCell>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Project Type</TableCell>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Budget</TableCell>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Target Date</TableCell>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

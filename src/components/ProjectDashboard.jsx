@@ -209,8 +209,8 @@ export default function ProjectDashboard() {
   };
 
   return (
-    <div style={{ fontFamily: 'Roboto, Arial, sans-serif', minHeight: '100vh', background: 'linear-gradient(135deg, #e0e7ff 0%, #ede9fe 50%, #fce7f3 100%)' }}>
-      <Typography variant="h3" fontWeight={900} align="center" sx={{ pt: 8, mb: 6, background: 'linear-gradient(90deg, #2563eb, #a21caf, #db2777)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 2px 8px #c7d2fe' }}>
+    <div style={{ fontFamily: 'Roboto, Arial, sans-serif', minHeight: '100vh', background: 'linear-gradient(135deg, #232d1b 0%, #2e3b23 100%)' }}>
+      <Typography variant="h3" fontWeight={900} align="center" sx={{ pt: 8, mb: 6, background: 'linear-gradient(90deg, #708238, #b5c99a, #e1c16e)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 2px 8px #4b5320' }}>
         🚀 Designor Studio PM
       </Typography>
       <TopNav current={currentPage} setCurrent={setCurrentPage} />
