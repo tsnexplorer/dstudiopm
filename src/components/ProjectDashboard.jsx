@@ -1,5 +1,29 @@
 import React, { useState } from 'react';
 import ClientOnboarding from './ClientOnboarding';
+import {
+  Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton
+} from '@mui/material';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import StoreIcon from '@mui/icons-material/Store';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 function TopNav({ current, setCurrent }) {
   const navItems = [
@@ -12,107 +36,125 @@ function TopNav({ current, setCurrent }) {
     { key: 'ai', label: 'AI Assistant', icon: '🤖' },
     { key: 'admin', label: 'Admin Panel', icon: '🔒' },
   ];
+  const icons = {
+    onboarding: <AssignmentIcon />,
+    tasks: <AssignmentIcon />,
+    timeline: <TimelineIcon />,
+    budget: <AttachMoneyIcon />,
+    vendor: <StoreIcon />,
+    photos: <PhotoCameraIcon />,
+    ai: <SmartToyIcon />,
+    admin: <AdminPanelSettingsIcon />,
+  };
   return (
-    <nav className="flex justify-center bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 shadow-lg border-b mb-8 rounded-b-xl py-2">
+    <Paper elevation={2} sx={{ display: 'flex', justifyContent: 'center', mb: 4, borderRadius: '0 0 16px 16px', py: 1, bgcolor: 'primary.main' }}>
       {navItems.map(item => (
-        <button
+        <Button
           key={item.key}
-          className={`mx-2 px-5 py-3 font-semibold rounded-t-xl transition-all duration-200 focus:outline-none text-lg shadow flex items-center gap-2 ${current === item.key ? 'bg-white text-blue-700 shadow-lg' : 'text-white hover:bg-white hover:text-blue-700'}`}
+          variant={current === item.key ? 'contained' : 'text'}
+          color={current === item.key ? 'secondary' : 'inherit'}
+          startIcon={icons[item.key]}
+          sx={{ mx: 1, px: 3, py: 1.5, fontWeight: 600, fontSize: 16, borderRadius: '16px 16px 0 0' }}
           onClick={() => setCurrent(item.key)}
         >
-          <span>{item.icon}</span>
           {item.label}
-        </button>
+        </Button>
       ))}
-    </nav>
+    </Paper>
   );
 }
 
 
 function TaskTracker({ newTask, handleTaskChange, addTask, handleAssignTask, tasks }) {
   return (
-    <div className="card-pro max-w-2xl mx-auto">
-      <h2 className="heading-pro text-purple-700 mb-4">✅ Task Tracker</h2>
-      <input className="input-pro mb-2" placeholder="Task Title" name="title" value={newTask.title} onChange={handleTaskChange}/>
-      <input className="input-pro mb-2" type="date" name="due" value={newTask.due} onChange={handleTaskChange}/>
-      <select className="input-pro mb-2" name="status" value={newTask.status} onChange={handleTaskChange}>
-        <option>Pending</option>
-        <option>In Progress</option>
-        <option>Completed</option>
-      </select>
-      <button className="btn-rounded mr-2" onClick={addTask}>Add Task</button>
-      <button className="btn-rounded" style={{ backgroundImage: 'linear-gradient(to right, #a21caf, #db2777)' }} onClick={handleAssignTask}>Assign Task</button>
-      <ul className="list-disc pl-5 mt-2">
+    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
+      <Typography variant="h5" color="secondary" fontWeight={700} gutterBottom>✅ Task Tracker</Typography>
+      <TextField label="Task Title" name="title" value={newTask.title} onChange={handleTaskChange} fullWidth sx={{ mb: 2 }} />
+      <TextField label="Due Date" name="due" type="date" value={newTask.due} onChange={handleTaskChange} fullWidth sx={{ mb: 2 }} InputLabelProps={{ shrink: true }} />
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Status</InputLabel>
+        <Select name="status" value={newTask.status} onChange={handleTaskChange} label="Status">
+          <MenuItem value="Pending">Pending</MenuItem>
+          <MenuItem value="In Progress">In Progress</MenuItem>
+          <MenuItem value="Completed">Completed</MenuItem>
+        </Select>
+      </FormControl>
+      <Button variant="contained" color="primary" sx={{ mr: 2, borderRadius: 2 }} onClick={addTask}>Add Task</Button>
+      <Button variant="outlined" color="secondary" sx={{ borderRadius: 2 }} onClick={handleAssignTask}>Assign Task</Button>
+      <ul style={{ listStyle: 'disc', paddingLeft: 20, marginTop: 16 }}>
         {tasks.map((task, idx) => (
           <li key={idx}>{task.title} - {task.status} (Due: {task.due})</li>
         ))}
       </ul>
-    </div>
+    </Paper>
   );
 }
 
 function TimelineTracker() {
   return (
-    <div className="card-pro max-w-2xl mx-auto">
-      <h2 className="heading-pro text-pink-700 mb-4">📊 Timeline Tracker (Gantt Chart)</h2>
-      <p className="text-gray-600">Timeline visualization will be displayed here.</p>
-    </div>
+    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
+      <Typography variant="h5" color="error" fontWeight={700} gutterBottom>📊 Timeline Tracker (Gantt Chart)</Typography>
+      <Typography color="text.secondary">Timeline visualization will be displayed here.</Typography>
+    </Paper>
   );
 }
 
 function BudgetDashboard({ project, handleBudgetAlert }) {
   return (
-    <div className="card-pro max-w-2xl mx-auto">
-      <h2 className="heading-pro text-yellow-700 mb-4">💰 Budget Dashboard</h2>
-      <p>Planned Budget: ₹{project.budget}</p>
-      <p>Actual Spend: ₹0 {/* TODO: Track actual spend */}</p>
-      <button className="btn-rounded" style={{ backgroundImage: 'linear-gradient(to right, #fbbf24, #db2777)' }} onClick={handleBudgetAlert}>Check Budget Status</button>
-    </div>
+    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
+      <Typography variant="h5" color="warning.main" fontWeight={700} gutterBottom>💰 Budget Dashboard</Typography>
+      <Typography>Planned Budget: ₹{project.budget}</Typography>
+      <Typography>Actual Spend: ₹0 {/* TODO: Track actual spend */}</Typography>
+      <Button variant="contained" color="warning" sx={{ mt: 2, borderRadius: 2 }} onClick={handleBudgetAlert}>Check Budget Status</Button>
+    </Paper>
   );
 }
 
 function VendorCommsHub({ project, handleChange, handleVendorReminder }) {
   return (
-    <div className="card-pro max-w-2xl mx-auto">
-      <h2 className="heading-pro text-blue-700 mb-4">🛒 Vendor Comms Hub</h2>
-      <input className="input-pro mb-2" placeholder="Vendor Name" name="vendor" value={project.vendor || ''} onChange={handleChange}/>
-      <input className="input-pro mb-2" placeholder="Order Details" name="order" value={project.order || ''} onChange={handleChange}/>
-      <button className="btn-rounded" style={{ backgroundImage: 'linear-gradient(to right, #2563eb, #a21caf)' }} onClick={handleVendorReminder}>Send Reminder</button>
-    </div>
+    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
+      <Typography variant="h5" color="primary" fontWeight={700} gutterBottom>🛒 Vendor Comms Hub</Typography>
+      <TextField label="Vendor Name" name="vendor" value={project.vendor || ''} onChange={handleChange} fullWidth sx={{ mb: 2 }} />
+      <TextField label="Order Details" name="order" value={project.order || ''} onChange={handleChange} fullWidth sx={{ mb: 2 }} />
+      <Button variant="contained" color="primary" sx={{ borderRadius: 2 }} onClick={handleVendorReminder}>Send Reminder</Button>
+    </Paper>
   );
 }
 
 function SitePhotoLogs({ project, handleChange, handlePhotoUpload }) {
   return (
-    <div className="card-pro max-w-2xl mx-auto">
-      <h2 className="heading-pro text-pink-700 mb-4">📷 Site Photo Logs</h2>
-      <input className="input-pro mb-2" type="file" accept="image/*" onChange={handlePhotoUpload}/>
-      <input className="input-pro mb-2" placeholder="Tag" name="photoTag" value={project.photoTag || ''} onChange={handleChange}/>
-      <textarea className="input-pro mb-2" placeholder="Notes" name="photoNotes" value={project.photoNotes || ''} onChange={handleChange}></textarea>
-    </div>
+    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
+      <Typography variant="h5" color="error" fontWeight={700} gutterBottom>📷 Site Photo Logs</Typography>
+      <Button variant="contained" component="label" color="secondary" startIcon={<PhotoCameraIcon />} sx={{ mb: 2, borderRadius: 2 }}>
+        Upload Photo
+        <input type="file" accept="image/*" hidden onChange={handlePhotoUpload} />
+      </Button>
+      <TextField label="Tag" name="photoTag" value={project.photoTag || ''} onChange={handleChange} fullWidth sx={{ mb: 2 }} />
+      <TextField label="Notes" name="photoNotes" value={project.photoNotes || ''} onChange={handleChange} fullWidth multiline rows={2} />
+    </Paper>
   );
 }
 
 function AIAssistant({ handleAutoReport, handleBudgetAlert, handleVendorReminder }) {
   return (
-    <div className="card-pro max-w-2xl mx-auto">
-      <h2 className="heading-pro text-purple-700 mb-4">🤖 AI Assistant</h2>
-      <button className="btn-rounded mb-2" style={{ backgroundImage: 'linear-gradient(to right, #22c55e, #2563eb)' }} onClick={handleAutoReport}>Generate Weekly Report</button>
-      <button className="btn-rounded mb-2" style={{ backgroundImage: 'linear-gradient(to right, #2563eb, #a21caf)' }} onClick={handleAutoReport}>Generate Monthly Report</button>
-      <button className="btn-rounded mb-2" style={{ backgroundImage: 'linear-gradient(to right, #fbbf24, #db2777)' }} onClick={handleBudgetAlert}>Check Budget Status</button>
-      <button className="btn-rounded mb-2" style={{ backgroundImage: 'linear-gradient(to right, #a21caf, #db2777)' }} onClick={handleVendorReminder}>Send Vendor Reminder</button>
-    </div>
+    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
+      <Typography variant="h5" color="secondary" fontWeight={700} gutterBottom>🤖 AI Assistant</Typography>
+      <Button variant="contained" color="success" sx={{ mb: 2, borderRadius: 2 }} onClick={handleAutoReport}>Generate Weekly Report</Button>
+      <Button variant="contained" color="primary" sx={{ mb: 2, borderRadius: 2 }} onClick={handleAutoReport}>Generate Monthly Report</Button>
+      <Button variant="contained" color="warning" sx={{ mb: 2, borderRadius: 2 }} onClick={handleBudgetAlert}>Check Budget Status</Button>
+      <Button variant="contained" color="error" sx={{ mb: 2, borderRadius: 2 }} onClick={handleVendorReminder}>Send Vendor Reminder</Button>
+    </Paper>
   );
 }
 
 function AdminPanel({ handleAddProject, handleRemoveProject }) {
   return (
-    <div className="card-pro max-w-2xl mx-auto">
-      <h2 className="heading-pro text-blue-900 mb-4">🔒 Admin Panel</h2>
-      <button className="btn-rounded mb-2" style={{ backgroundImage: 'linear-gradient(to right, #22c55e, #2563eb)' }} onClick={handleAddProject}>Add Project</button>
-      <button className="btn-rounded mb-2" style={{ backgroundImage: 'linear-gradient(to right, #ef4444, #db2777)' }} onClick={handleRemoveProject}>Remove Project</button>
-      <p className="text-gray-600">Monitor performance and manage projects here.</p>
-    </div>
+    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
+      <Typography variant="h5" color="primary" fontWeight={700} gutterBottom>🔒 Admin Panel</Typography>
+      <Button variant="contained" color="success" sx={{ mb: 2, borderRadius: 2 }} onClick={handleAddProject}>Add Project</Button>
+      <Button variant="contained" color="error" sx={{ mb: 2, borderRadius: 2 }} onClick={handleRemoveProject}>Remove Project</Button>
+      <Typography color="text.secondary">Monitor performance and manage projects here.</Typography>
+    </Paper>
   );
 }
 
@@ -167,10 +209,12 @@ export default function ProjectDashboard() {
   };
 
   return (
-    <div className="font-sans min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100">
-      <h1 className="text-4xl font-extrabold mb-8 text-center pt-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 drop-shadow-lg">🚀 Designor Studio PM</h1>
+    <div style={{ fontFamily: 'Roboto, Arial, sans-serif', minHeight: '100vh', background: 'linear-gradient(135deg, #e0e7ff 0%, #ede9fe 50%, #fce7f3 100%)' }}>
+      <Typography variant="h3" fontWeight={900} align="center" sx={{ pt: 8, mb: 6, background: 'linear-gradient(90deg, #2563eb, #a21caf, #db2777)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 2px 8px #c7d2fe' }}>
+        🚀 Designor Studio PM
+      </Typography>
       <TopNav current={currentPage} setCurrent={setCurrentPage} />
-      <div className="mt-8">
+      <div style={{ marginTop: 32 }}>
         {currentPage === 'onboarding' && (
           <ClientOnboarding
             clients={clients}

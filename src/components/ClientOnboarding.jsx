@@ -1,5 +1,22 @@
-import React, { useState } from 'react';
-import { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton
+} from '@mui/material';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 // Dynamically load leaflet CSS
 function useLeafletCss() {
   useEffect(() => {
@@ -149,138 +166,213 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
   );
 
   return (
-    <div className="card-pro max-w-3xl mx-auto">
-      <h2 className="heading-pro mb-8"><span>👤</span>Client Onboarding</h2>
+    <Paper elevation={3} sx={{ maxWidth: 800, margin: '32px auto', padding: 4, fontFamily: 'Roboto, Arial, sans-serif' }}>
+      <Typography variant="h4" component="h2" gutterBottom fontWeight={700} sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <span role="img" aria-label="Client">👤</span>&nbsp;Client Onboarding
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <div className="mb-6 pb-6 border-b border-blue-200 grid grid-cols-1 gap-4">
+        <div style={{ marginBottom: 32, paddingBottom: 32, borderBottom: '1px solid #c7d2fe', display: 'grid', gap: 24 }}>
+          <TextField
+            label="Client Name"
+            name="client"
+            value={form.client}
+            onChange={handleChange}
+            required
+            error={!!error.client}
+            helperText={error.client}
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            label="Address"
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            required
+            error={!!error.address}
+            helperText={error.address}
+            fullWidth
+            variant="outlined"
+          />
           <div>
-            <label className="block text-blue-700 font-medium mb-1" htmlFor="client">Client Name <span className="text-red-500">*</span></label>
-            <input id="client" name="client" className="input-pro" value={form.client} onChange={handleChange} />
-            {error.client && <span className="text-xs text-red-500">{error.client}</span>}
-          </div>
-          <div>
-            <label className="block text-blue-700 font-medium mb-1" htmlFor="address">Address <span className="text-red-500">*</span></label>
-            <input id="address" name="address" className="input-pro" value={form.address} onChange={handleChange} />
-            {error.address && <span className="text-xs text-red-500">{error.address}</span>}
-          </div>
-          <div>
-            <label className="block text-blue-700 font-medium mb-1" htmlFor="maps">Location</label>
-            <div className="flex gap-2 items-center">
-              <button type="button" className="btn-rounded" onClick={() => setShowMap((v) => !v)}>
-                {showMap ? 'Hide Map' : 'Pick on Map'}
-              </button>
-              {showMap && (
-                <button type="button" className="btn-rounded" style={{ backgroundImage: 'linear-gradient(to right, #38bdf8, #6366f1)' }} onClick={handleCurrentLocation}>
-                  Use Current Location
-                </button>
-              )}
-            </div>
+            <Typography variant="subtitle1" fontWeight={500} gutterBottom>Location</Typography>
+            <Button variant="contained" color="primary" startIcon={<LocationOnIcon />} sx={{ mr: 2, borderRadius: 8 }} onClick={() => setShowMap((v) => !v)}>
+              {showMap ? 'Hide Map' : 'Pick on Map'}
+            </Button>
             {showMap && (
-              <div className="mt-2" style={{ height: '300px', width: '100%', borderRadius: '1rem', overflow: 'hidden' }}>
+              <Button variant="contained" color="secondary" sx={{ borderRadius: 8 }} onClick={handleCurrentLocation}>
+                Use Current Location
+              </Button>
+            )}
+            {showMap && (
+              <div style={{ marginTop: 16, height: 300, width: '100%', borderRadius: 16, overflow: 'hidden' }}>
                 <div ref={mapRef} style={{ height: '100%', width: '100%' }} />
-                <div className="text-xs text-gray-500 mt-1">Click on the map to select a location, or use your current location. The link will be auto-filled.</div>
+                <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
+                  Click on the map to select a location, or use your current location. The link will be auto-filled.
+                </Typography>
               </div>
             )}
           </div>
-          <div>
-            <label className="block text-blue-700 font-medium mb-1" htmlFor="propertyType">Property Type <span className="text-red-500">*</span></label>
-            <select id="propertyType" name="propertyType" className="input-pro" value={form.propertyType} onChange={handleChange}>
-              <option value="">Select...</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Villa">Villa</option>
-              <option value="Independent House">Independent House</option>
-              <option value="Commercial">Commercial</option>
-            </select>
-            {error.propertyType && <span className="text-xs text-red-500">{error.propertyType}</span>}
+          <FormControl fullWidth variant="outlined" required error={!!error.propertyType}>
+            <InputLabel id="propertyType-label">Property Type</InputLabel>
+            <Select
+              labelId="propertyType-label"
+              id="propertyType"
+              name="propertyType"
+              value={form.propertyType}
+              onChange={handleChange}
+              label="Property Type"
+            >
+              <MenuItem value="">Select...</MenuItem>
+              <MenuItem value="Apartment">Apartment</MenuItem>
+              <MenuItem value="Villa">Villa</MenuItem>
+              <MenuItem value="Independent House">Independent House</MenuItem>
+              <MenuItem value="Commercial">Commercial</MenuItem>
+            </Select>
+            {error.propertyType && <Typography variant="caption" color="error">{error.propertyType}</Typography>}
+          </FormControl>
+          <FormControl fullWidth variant="outlined" required error={!!error.projectType}>
+            <InputLabel id="projectType-label">Project Type</InputLabel>
+            <Select
+              labelId="projectType-label"
+              id="projectType"
+              name="projectType"
+              value={form.projectType}
+              onChange={handleChange}
+              label="Project Type"
+            >
+              <MenuItem value="">Select...</MenuItem>
+              {(form.propertyType === 'Apartment' || form.propertyType === 'Villa') && [ '1 BHK', '2BHK', '3BHK', '4BHK', '4+BHK' ].map(opt => (
+                <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+              ))}
+              {form.propertyType === 'Commercial' && (
+                <MenuItem value="Custom">Custom</MenuItem>
+              )}
+            </Select>
+            {error.projectType && <Typography variant="caption" color="error">{error.projectType}</Typography>}
+          </FormControl>
+          <div style={{ display: 'flex', gap: 16 }}>
+            <FormControl variant="outlined" sx={{ minWidth: 100 }}>
+              <InputLabel id="currency-label">Currency</InputLabel>
+              <Select
+                labelId="currency-label"
+                name="currency"
+                value={form.currency}
+                onChange={handleChange}
+                label="Currency"
+              >
+                <MenuItem value="INR">₹ INR</MenuItem>
+                <MenuItem value="USD">$ USD</MenuItem>
+                <MenuItem value="EUR">€ EUR</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="Budget"
+              name="budget"
+              type="number"
+              min={0}
+              value={form.budget}
+              onChange={handleChange}
+              required
+              error={!!error.budget}
+              helperText={error.budget}
+              fullWidth
+              variant="outlined"
+            />
           </div>
-          <div>
-            <label className="block text-blue-700 font-medium mb-1" htmlFor="projectType">Project Type <span className="text-red-500">*</span></label>
-            <select id="projectType" name="projectType" className="input-pro" value={form.projectType} onChange={handleChange}>
-              <option value="">Select...</option>
-              {form.propertyType === 'Apartment' || form.propertyType === 'Villa' ? (
-                [ '1 BHK', '2BHK', '3BHK', '4BHK', '4+BHK' ].map(opt => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))
-              ) : form.propertyType === 'Commercial' ? (
-                <option value="Custom">Custom</option>
-              ) : null}
-            </select>
-            {error.projectType && <span className="text-xs text-red-500">{error.projectType}</span>}
-          </div>
-          <div>
-            <label className="block text-blue-700 font-medium mb-1" htmlFor="budget">Budget <span className="text-red-500">*</span></label>
-            <div className="flex gap-2">
-              <select name="currency" className="input-pro w-24" value={form.currency} onChange={handleChange}>
-                <option value="INR">₹ INR</option>
-                <option value="USD">$ USD</option>
-                <option value="EUR">€ EUR</option>
-              </select>
-              <input id="budget" name="budget" className="input-pro" type="number" min="0" value={form.budget} onChange={handleChange} />
-            </div>
-            {error.budget && <span className="text-xs text-red-500">{error.budget}</span>}
-          </div>
-          <div>
-            <label className="block text-blue-700 font-medium mb-1" htmlFor="targetDate">Target Date <span className="text-red-500">*</span></label>
-            <input id="targetDate" name="targetDate" type="date" className="input-pro" value={form.targetDate} onChange={handleChange} />
-            {error.targetDate && <span className="text-xs text-red-500">{error.targetDate}</span>}
-          </div>
-          <div>
-            <label className="block text-blue-700 font-medium mb-1" htmlFor="notes">Notes</label>
-            <textarea id="notes" name="notes" className="input-pro" value={form.notes} onChange={handleChange}></textarea>
-          </div>
+          <TextField
+            label="Target Date"
+            name="targetDate"
+            type="date"
+            value={form.targetDate}
+            onChange={handleChange}
+            required
+            error={!!error.targetDate}
+            helperText={error.targetDate}
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="Notes"
+            name="notes"
+            value={form.notes}
+            onChange={handleChange}
+            multiline
+            rows={3}
+            fullWidth
+            variant="outlined"
+          />
         </div>
-        <div className="flex justify-end mt-8">
-          <button type="submit" className="btn-rounded flex items-center gap-2">
-            <span>💾</span> {editingId ? 'Update' : 'Add'}
-          </button>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 32 }}>
+          <Button type="submit" variant="contained" color="primary" sx={{ borderRadius: 8, fontWeight: 600 }} startIcon={<span>💾</span>}>
+            {editingId ? 'Update' : 'Add'}
+          </Button>
           {editingId && (
-            <button type="button" className="btn-rounded flex items-center gap-2 ml-2" onClick={() => { setForm(initialForm); setEditingId(null); setError({}); }}>
+            <Button type="button" variant="outlined" color="secondary" sx={{ borderRadius: 8, ml: 2 }} onClick={() => { setForm(initialForm); setEditingId(null); setError({}); }}>
               Cancel
-            </button>
+            </Button>
           )}
         </div>
       </form>
-      <div className="mt-10">
-        <h3 className="heading-pro text-lg mb-4">Existing Clients</h3>
-        <input className="input-pro mb-4" placeholder="Search clients..." value={search} onChange={e => setSearch(e.target.value)} />
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-blue-100">
-              <th className="p-2">Client Name</th>
-              <th className="p-2">Address</th>
-              <th className="p-2">Property Type</th>
-              <th className="p-2">Project Type</th>
-              <th className="p-2">Budget</th>
-              <th className="p-2">Target Date</th>
-              <th className="p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredClients.length === 0 && (
-              <tr><td colSpan={7} className="p-2 text-center text-gray-400">No clients found.</td></tr>
-            )}
-            {filteredClients.map((c) => (
-              <tr key={c.id} className="border-b">
-                <td className="p-2">{c.client}</td>
-                <td className="p-2">
-                  {c.address}
-                  {c.maps && (
-                    <a href={c.maps} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline ml-2">View on Map</a>
-                  )}
-                </td>
-                <td className="p-2">{c.propertyType}</td>
-                <td className="p-2">{c.projectType}</td>
-                <td className="p-2">{c.currency} {c.budget}</td>
-                <td className="p-2">{c.targetDate}</td>
-                <td className="p-2">
-                  <button className="btn-rounded mr-2" onClick={() => handleEdit(c.id)}>Edit</button>
-                  <button className="btn-rounded" style={{ backgroundImage: 'linear-gradient(to right, #ef4444, #db2777)' }} onClick={() => handleDelete(c.id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div style={{ marginTop: 40 }}>
+        <Typography variant="h6" gutterBottom fontWeight={600}>Existing Clients</Typography>
+        <TextField
+          placeholder="Search clients..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          fullWidth
+          variant="outlined"
+          sx={{ mb: 2 }}
+        />
+        <TableContainer component={Paper} elevation={1}>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: '#e0e7ff' }}>
+                <TableCell>Client Name</TableCell>
+                <TableCell>Address</TableCell>
+                <TableCell>Property Type</TableCell>
+                <TableCell>Project Type</TableCell>
+                <TableCell>Budget</TableCell>
+                <TableCell>Target Date</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredClients.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7} align="center" sx={{ color: '#9ca3af' }}>No clients found.</TableCell>
+                </TableRow>
+              )}
+              {filteredClients.map((c) => (
+                <TableRow key={c.id}>
+                  <TableCell>{c.client}</TableCell>
+                  <TableCell>
+                    {c.address}
+                    {c.maps && (
+                      <IconButton href={c.maps} target="_blank" rel="noopener noreferrer" color="primary" sx={{ ml: 1 }}>
+                        <LocationOnIcon />
+                      </IconButton>
+                    )}
+                  </TableCell>
+                  <TableCell>{c.propertyType}</TableCell>
+                  <TableCell>{c.projectType}</TableCell>
+                  <TableCell>{c.currency} {c.budget}</TableCell>
+                  <TableCell>{c.targetDate}</TableCell>
+                  <TableCell>
+                    <Button variant="outlined" color="primary" sx={{ mr: 1, borderRadius: 8 }} onClick={() => handleEdit(c.id)}>
+                      Edit
+                    </Button>
+                    <Button variant="contained" color="error" sx={{ borderRadius: 8 }} onClick={() => handleDelete(c.id)}>
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
-    </div>
+    </Paper>
   );
 }
