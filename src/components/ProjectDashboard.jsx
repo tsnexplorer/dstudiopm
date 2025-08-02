@@ -102,7 +102,7 @@ function TopNav({ current, setCurrent }) {
 
 
 
-export default function ProjectDashboard() {
+export default function MainPage() {
   // Charting helpers
   const getProjectStateCounts = () => {
     const counts = {};

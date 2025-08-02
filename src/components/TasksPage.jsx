@@ -390,46 +390,31 @@ export default function TasksPage({ projects, tasks, onAddTask, onUpdateTask, on
             </TableBody>
           </Table>
         </TableContainer>
+    </div>
           {/* Gantt chart below the table */}
           {showGantt && (
-            <div style={{ width: '100%', marginTop: 32 }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>Project Timeline</Typography>
-              <Paper elevation={2} sx={{ p: 2, bgcolor: '#f5f5f5' }} style={{ minHeight: 400 }}>
-                <div className="gantt-olive-bg-light">
-                  <Gantt
-                    tasks={Array.isArray(ganttTasks) ? ganttTasks.map(task => ({
-                      ...task,
-                      styles: {
-                        progressColor: 'var(--gantt-bar-green)',
-                        progressSelectedColor: 'var(--gantt-bar-selected)',
-                        barBackgroundColor: 'var(--gantt-bar-bg-light)',
-                        barBorderColor: 'var(--gantt-bar-border)',
-                        backgroundColor: 'var(--gantt-bar-bg-light)',
-                        textColor: 'var(--gantt-bar-text)'
-                      }
-                    })) : []}
-                    viewMode="Day"
-                    locale="en-GB"
-                    columnWidth={40}
-                    listCellWidth={80}
-                  />
-                </div>
-              </Paper>
-            </div>
-          )}
-      </div>
-          {/* Gantt chart below the table */}
-          {showGantt && (
-            <div style={{ width: '100%', marginTop: 32 }}>
+            <div style={{ width: '100%' }}>
               <Typography variant="h6" sx={{ mb: 2 }}>Project Timeline</Typography>
               <Paper elevation={2} sx={{ p: 2, minHeight: 400, backgroundColor: 'var(--gantt-bar-bg-light)' }}>
                 <Gantt
-                  tasks={Array.isArray(ganttTasks) ? ganttTasks : []}
+                  tasks={Array.isArray(ganttTasks) ? ganttTasks.map(task => ({
+                    ...task,
+                    styles: {
+                      ...task.styles,
+                      backgroundColor: 'var(--gantt-row-bg-light)',
+                      barBackgroundColor: 'var(--gantt-row-bg-light)',
+                      textColor: 'var(--gantt-bar-text)',
+                      rowBackgroundColor: 'var(--gantt-row-bg-light)',
+                      progressColor: 'var(--gantt-bar-green)',
+                      columnBackgroundColor: 'var(--gantt-bar-bg-light)',
+                      progressSelectedColor: 'var(--gantt-bar-selected)',
+                    }
+                  })) : []}
                   viewMode="Day"
                   locale="en-GB"
                   columnWidth={100}
                   listCellWidth={150}
-                  dateColumnFormat={(date) => date.getDate()}
+                  dateColumnFormat={(date) => date.toLocaleDateString('en-US', { day: 'numeric' })}
                 />
               </Paper>
             </div>

@@ -22,28 +22,28 @@
 
 /* Force Gantt chart canvas and bars to use theme colors */
 .gantt-task-react .gantt-container,
-.gantt-olive-bg-light .gantt-task-react .gantt-container {
+.gantt-task-react .gantt-container {
   background: var(--gantt-bar-bg-light, #5a6b54) !important;
 }
 .gantt-task-react .bar,
-.gantt-olive-bg-light .gantt-task-react .bar {
+.gantt-task-react .bar {
   fill: var(--gantt-bar-green, #8bc34a) !important;
   stroke: var(--gantt-bar-border, #8bc34a) !important;
 }
 .gantt-task-react .bar-progress,
-.gantt-olive-bg-light .gantt-task-react .bar-progress {
+.gantt-task-react .bar-progress {
   fill: var(--gantt-bar-green, #8bc34a) !important;
 }
 .gantt-task-react .bar-label,
-.gantt-olive-bg-light .gantt-task-react .bar-label {
-  fill: var(--gantt-bar-text, #f5f5dc) !important;
+.gantt-task-react .bar-label {
+  fill: var(--gantt-bar-text, #3d4a3a) !important;
 }
 .gantt-task-react .bar-text,
-.gantt-olive-bg-light .gantt-task-react .bar-text {
+.gantt-task-react .bar-text {
   fill: var(--gantt-bar-text, #f5f5dc) !important;
 }
 .gantt-task-react .gantt-table-header th,
-.gantt-olive-bg-light .gantt-task-react .gantt-table-header th {
+.gantt-task-react .gantt-table-header th {
   position: sticky !important;
   top: 0 !important;
   z-index: 10 !important;
@@ -59,10 +59,10 @@
 }
 /* Make Gantt header font smaller and more compact */
 .gantt-table .gantt-table-header th {
-  font-size: 11px !important;
-  padding: 6px 0 2px 0 !important;
+  font-size: 9px !important;
+  padding: 1px 0 1px 0 !important;
   text-align: center !important;
-  font-weight: 500 !important;
+  font-weight: 300 !important;
   background: var(--gantt-bar-bg, #3d4a3a) !important;
   color: var(--gantt-bar-text, #f5f5dc) !important;
   position: sticky;
