@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
+import { db } from '../firebase';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import ClientOnboarding from './ClientOnboarding';
+import TaskTracker from './TaskTracker';
+import TimelineTracker from './TimelineTracker';
+import BudgetDashboard from './BudgetDashboard';
+import VendorCommsHub from './VendorCommsHub';
+import SitePhotoLogs from './SitePhotoLogs';
+import AdminPanel from './AdminPanel';
+import AIAssistant from './AIAssistant';
 import {
   Typography,
   TextField,
@@ -65,103 +74,21 @@ function TopNav({ current, setCurrent }) {
 }
 
 
-function TaskTracker({ newTask, handleTaskChange, addTask, handleAssignTask, tasks }) {
-  return (
-    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
-      <Typography variant="h5" color="secondary" fontWeight={700} gutterBottom>✅ Task Tracker</Typography>
-      <TextField label="Task Title" name="title" value={newTask.title} onChange={handleTaskChange} fullWidth sx={{ mb: 2 }} />
-      <TextField label="Due Date" name="due" type="date" value={newTask.due} onChange={handleTaskChange} fullWidth sx={{ mb: 2 }} InputLabelProps={{ shrink: true }} />
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>Status</InputLabel>
-        <Select name="status" value={newTask.status} onChange={handleTaskChange} label="Status">
-          <MenuItem value="Pending">Pending</MenuItem>
-          <MenuItem value="In Progress">In Progress</MenuItem>
-          <MenuItem value="Completed">Completed</MenuItem>
-        </Select>
-      </FormControl>
-      <Button variant="contained" color="primary" sx={{ mr: 2, borderRadius: 2 }} onClick={addTask}>Add Task</Button>
-      <Button variant="outlined" color="secondary" sx={{ borderRadius: 2 }} onClick={handleAssignTask}>Assign Task</Button>
-      <ul style={{ listStyle: 'disc', paddingLeft: 20, marginTop: 16 }}>
-        {tasks.map((task, idx) => (
-          <li key={idx}>{task.title} - {task.status} (Due: {task.due})</li>
-        ))}
-      </ul>
-    </Paper>
-  );
-}
-
-function TimelineTracker() {
-  return (
-    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
-      <Typography variant="h5" color="error" fontWeight={700} gutterBottom>📊 Timeline Tracker (Gantt Chart)</Typography>
-      <Typography color="text.secondary">Timeline visualization will be displayed here.</Typography>
-    </Paper>
-  );
-}
-
-function BudgetDashboard({ project, handleBudgetAlert }) {
-  return (
-    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
-      <Typography variant="h5" color="warning.main" fontWeight={700} gutterBottom>💰 Budget Dashboard</Typography>
-      <Typography>Planned Budget: ₹{project.budget}</Typography>
-      <Typography>Actual Spend: ₹0 {/* TODO: Track actual spend */}</Typography>
-      <Button variant="contained" color="warning" sx={{ mt: 2, borderRadius: 2 }} onClick={handleBudgetAlert}>Check Budget Status</Button>
-    </Paper>
-  );
-}
-
-function VendorCommsHub({ project, handleChange, handleVendorReminder }) {
-  return (
-    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
-      <Typography variant="h5" color="primary" fontWeight={700} gutterBottom>🛒 Vendor Comms Hub</Typography>
-      <TextField label="Vendor Name" name="vendor" value={project.vendor || ''} onChange={handleChange} fullWidth sx={{ mb: 2 }} />
-      <TextField label="Order Details" name="order" value={project.order || ''} onChange={handleChange} fullWidth sx={{ mb: 2 }} />
-      <Button variant="contained" color="primary" sx={{ borderRadius: 2 }} onClick={handleVendorReminder}>Send Reminder</Button>
-    </Paper>
-  );
-}
-
-function SitePhotoLogs({ project, handleChange, handlePhotoUpload }) {
-  return (
-    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
-      <Typography variant="h5" color="error" fontWeight={700} gutterBottom>📷 Site Photo Logs</Typography>
-      <Button variant="contained" component="label" color="secondary" startIcon={<PhotoCameraIcon />} sx={{ mb: 2, borderRadius: 2 }}>
-        Upload Photo
-        <input type="file" accept="image/*" hidden onChange={handlePhotoUpload} />
-      </Button>
-      <TextField label="Tag" name="photoTag" value={project.photoTag || ''} onChange={handleChange} fullWidth sx={{ mb: 2 }} />
-      <TextField label="Notes" name="photoNotes" value={project.photoNotes || ''} onChange={handleChange} fullWidth multiline rows={2} />
-    </Paper>
-  );
-}
-
-function AIAssistant({ handleAutoReport, handleBudgetAlert, handleVendorReminder }) {
-  return (
-    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
-      <Typography variant="h5" color="secondary" fontWeight={700} gutterBottom>🤖 AI Assistant</Typography>
-      <Button variant="contained" color="success" sx={{ mb: 2, borderRadius: 2 }} onClick={handleAutoReport}>Generate Weekly Report</Button>
-      <Button variant="contained" color="primary" sx={{ mb: 2, borderRadius: 2 }} onClick={handleAutoReport}>Generate Monthly Report</Button>
-      <Button variant="contained" color="warning" sx={{ mb: 2, borderRadius: 2 }} onClick={handleBudgetAlert}>Check Budget Status</Button>
-      <Button variant="contained" color="error" sx={{ mb: 2, borderRadius: 2 }} onClick={handleVendorReminder}>Send Vendor Reminder</Button>
-    </Paper>
-  );
-}
-
-function AdminPanel({ handleAddProject, handleRemoveProject }) {
-  return (
-    <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, mb: 4 }}>
-      <Typography variant="h5" color="primary" fontWeight={700} gutterBottom>🔒 Admin Panel</Typography>
-      <Button variant="contained" color="success" sx={{ mb: 2, borderRadius: 2 }} onClick={handleAddProject}>Add Project</Button>
-      <Button variant="contained" color="error" sx={{ mb: 2, borderRadius: 2 }} onClick={handleRemoveProject}>Remove Project</Button>
-      <Typography color="text.secondary">Monitor performance and manage projects here.</Typography>
-    </Paper>
-  );
-}
 
 export default function ProjectDashboard() {
   const [clients, setClients] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ title: '', due: '', status: 'Pending' });
+
+  // Fetch tasks from Firestore on mount
+  React.useEffect(() => {
+    const fetchTasks = async () => {
+      const querySnapshot = await getDocs(collection(db, 'tasks'));
+      const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setTasks(data);
+    };
+    fetchTasks();
+  }, []);
   const [currentPage, setCurrentPage] = useState('onboarding');
 
   // Client CRUD
@@ -180,8 +107,9 @@ export default function ProjectDashboard() {
     const { name, value } = e.target;
     setNewTask((prev) => ({ ...prev, [name]: value }));
   };
-  const addTask = () => {
-    setTasks((prev) => [...prev, newTask]);
+  const addTask = async () => {
+    const docRef = await addDoc(collection(db, 'tasks'), newTask);
+    setTasks((prev) => [...prev, { ...newTask, id: docRef.id }]);
     setNewTask({ title: '', due: '', status: 'Pending' });
   };
 
@@ -225,25 +153,25 @@ export default function ProjectDashboard() {
           />
         )}
         {currentPage === 'tasks' && (
-          <TaskTracker newTask={newTask} handleTaskChange={handleTaskChange} addTask={addTask} handleAssignTask={handleAssignTask} tasks={tasks} />
+          <TaskTracker handleAssignTask={handleAssignTask} />
         )}
         {currentPage === 'timeline' && (
           <TimelineTracker />
         )}
         {currentPage === 'budget' && (
-          <BudgetDashboard project={clients[0] || {}} handleBudgetAlert={handleBudgetAlert} />
+          <BudgetDashboard />
         )}
         {currentPage === 'vendor' && (
-          <VendorCommsHub project={clients[0] || {}} handleChange={() => {}} handleVendorReminder={handleVendorReminder} />
+          <VendorCommsHub />
         )}
         {currentPage === 'photos' && (
-          <SitePhotoLogs project={clients[0] || {}} handleChange={() => {}} handlePhotoUpload={handlePhotoUpload} />
+          <SitePhotoLogs />
         )}
         {currentPage === 'ai' && (
           <AIAssistant handleAutoReport={handleAutoReport} handleBudgetAlert={handleBudgetAlert} handleVendorReminder={handleVendorReminder} />
         )}
         {currentPage === 'admin' && (
-          <AdminPanel handleAddProject={handleAddProject} handleRemoveProject={handleRemoveProject} />
+          <AdminPanel />
         )}
       </div>
     </div>

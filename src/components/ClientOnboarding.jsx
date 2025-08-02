@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { db } from '../firebase';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import {
   Typography,
   TextField,
@@ -48,6 +50,16 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
   const markerRef = useRef(null);
   const leafletMapRef = useRef(null);
   const [showMap, setShowMap] = useState(false);
+  const [clientsData, setClientsData] = useState([]);
+  // Fetch clients from Firestore on mount
+  useEffect(() => {
+    const fetchClients = async () => {
+      const querySnapshot = await getDocs(collection(db, 'clients'));
+      const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setClientsData(data);
+    };
+    fetchClients();
+  }, []);
   // Load leaflet.js and set up map picker
   useEffect(() => {
     if (!showMap) return;
@@ -128,15 +140,19 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
   };
 
   // Handle submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const err = validate();
     setError(err);
     if (Object.keys(err).length) return;
     if (editingId) {
-      onUpdate(editingId, form);
+      // Update client in Firestore
+      await updateDoc(doc(db, 'clients', editingId), form);
+      setClientsData(prev => prev.map(c => c.id === editingId ? { ...form, id: editingId } : c));
     } else {
-      onAdd(form);
+      // Add client to Firestore
+      const docRef = await addDoc(collection(db, 'clients'), form);
+      setClientsData(prev => [...prev, { ...form, id: docRef.id }]);
     }
     setForm(initialForm);
     setEditingId(null);
@@ -144,15 +160,16 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
 
   // Handle edit
   const handleEdit = (id) => {
-    const client = clients.find((c) => c.id === id);
+    const client = clientsData.find((c) => c.id === id);
     setForm(client);
     setEditingId(id);
     setError({});
   };
 
   // Handle delete
-  const handleDelete = (id) => {
-    onDelete(id);
+  const handleDelete = async (id) => {
+    await deleteDoc(doc(db, 'clients', id));
+    setClientsData(prev => prev.filter((c) => c.id !== id));
     if (editingId === id) {
       setForm(initialForm);
       setEditingId(null);
@@ -161,7 +178,7 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
   };
 
   // Filter clients
-  const filteredClients = clients.filter(
+  const filteredClients = clientsData.filter(
     (c) => c.client.toLowerCase().includes(search.toLowerCase()) || c.address.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -242,7 +259,7 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
               label="Project Type"
             >
               <MenuItem value="">Select...</MenuItem>
-              {(form.propertyType === 'Apartment' || form.propertyType === 'Villa') && [ '1 BHK', '2BHK', '3BHK', '4BHK', '4+BHK' ].map(opt => (
+              {(form.propertyType === 'Independent House' || form.propertyType === 'Apartment' || form.propertyType === 'Villa') && [ '1 BHK', '2BHK', '3BHK', '4BHK', '4+BHK' ].map(opt => (
                 <MenuItem key={opt} value={opt}>{opt}</MenuItem>
               ))}
               {form.propertyType === 'Commercial' && (
