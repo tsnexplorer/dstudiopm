@@ -36,11 +36,6 @@ const initialForm = {
   client: '',
   address: '',
   maps: '',
-  propertyType: '',
-  projectType: '',
-  budget: '',
-  currency: 'INR',
-  targetDate: '',
   notes: '',
 };
 
@@ -126,10 +121,6 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
     const err = {};
     if (!form.client) err.client = 'Required';
     if (!form.address) err.address = 'Required';
-    if (!form.propertyType) err.propertyType = 'Required';
-    if (!form.projectType) err.projectType = 'Required';
-    if (!form.budget) err.budget = 'Required';
-    if (!form.targetDate) err.targetDate = 'Required';
     return err;
   };
 
@@ -211,6 +202,24 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
             fullWidth
             variant="outlined"
           />
+          <TextField
+            label="Mobile Number"
+            name="mobile"
+            value={form.mobile || ''}
+            onChange={handleChange}
+            required
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            label="Email Address"
+            name="email"
+            value={form.email || ''}
+            onChange={handleChange}
+            required
+            fullWidth
+            variant="outlined"
+          />
           <div>
             <Typography variant="subtitle1" fontWeight={500} gutterBottom>Location</Typography>
             <Button variant="contained" color="primary" startIcon={<LocationOnIcon />} sx={{ mr: 2, borderRadius: 8 }} onClick={() => setShowMap((v) => !v)}>
@@ -230,86 +239,7 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
               </div>
             )}
           </div>
-          <FormControl fullWidth variant="outlined" required error={!!error.propertyType}>
-            <InputLabel id="propertyType-label">Property Type</InputLabel>
-            <Select
-              labelId="propertyType-label"
-              id="propertyType"
-              name="propertyType"
-              value={form.propertyType}
-              onChange={handleChange}
-              label="Property Type"
-            >
-              <MenuItem value="">Select...</MenuItem>
-              <MenuItem value="Apartment">Apartment</MenuItem>
-              <MenuItem value="Villa">Villa</MenuItem>
-              <MenuItem value="Independent House">Independent House</MenuItem>
-              <MenuItem value="Commercial">Commercial</MenuItem>
-            </Select>
-            {error.propertyType && <Typography variant="caption" color="error">{error.propertyType}</Typography>}
-          </FormControl>
-          <FormControl fullWidth variant="outlined" required error={!!error.projectType}>
-            <InputLabel id="projectType-label">Project Type</InputLabel>
-            <Select
-              labelId="projectType-label"
-              id="projectType"
-              name="projectType"
-              value={form.projectType}
-              onChange={handleChange}
-              label="Project Type"
-            >
-              <MenuItem value="">Select...</MenuItem>
-              {(form.propertyType === 'Independent House' || form.propertyType === 'Apartment' || form.propertyType === 'Villa') && [ '1 BHK', '2BHK', '3BHK', '4BHK', '4+BHK' ].map(opt => (
-                <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-              ))}
-              {form.propertyType === 'Commercial' && (
-                <MenuItem value="Custom">Custom</MenuItem>
-              )}
-            </Select>
-            {error.projectType && <Typography variant="caption" color="error">{error.projectType}</Typography>}
-          </FormControl>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <FormControl variant="outlined" sx={{ minWidth: 100 }}>
-              <InputLabel id="currency-label">Currency</InputLabel>
-              <Select
-                labelId="currency-label"
-                name="currency"
-                value={form.currency}
-                onChange={handleChange}
-                label="Currency"
-              >
-                <MenuItem value="INR">₹ INR</MenuItem>
-                <MenuItem value="USD">$ USD</MenuItem>
-                <MenuItem value="EUR">€ EUR</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              label="Budget"
-              name="budget"
-              type="number"
-              min={0}
-              value={form.budget}
-              onChange={handleChange}
-              required
-              error={!!error.budget}
-              helperText={error.budget}
-              fullWidth
-              variant="outlined"
-            />
-          </div>
-          <TextField
-            label="Target Date"
-            name="targetDate"
-            type="date"
-            value={form.targetDate}
-            onChange={handleChange}
-            required
-            error={!!error.targetDate}
-            helperText={error.targetDate}
-            fullWidth
-            variant="outlined"
-            InputLabelProps={{ shrink: true }}
-          />
+          {/* Removed propertyType, projectType, budget, currency, targetDate fields from client form */}
           <TextField
             label="Notes"
             name="notes"
@@ -348,10 +278,9 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
             <TableRow sx={{ backgroundColor: 'background.accent' }}>
                 <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Client Name</TableCell>
                 <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Address</TableCell>
-                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Property Type</TableCell>
-                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Project Type</TableCell>
-                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Budget</TableCell>
-                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Target Date</TableCell>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Mobile</TableCell>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Email</TableCell>
+                {/* Removed propertyType, projectType, budget, targetDate columns from client table */}
                 <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -372,10 +301,9 @@ export default function ClientOnboarding({ clients, onAdd, onUpdate, onDelete })
                       </IconButton>
                     )}
                   </TableCell>
-                  <TableCell>{c.propertyType}</TableCell>
-                  <TableCell>{c.projectType}</TableCell>
-                  <TableCell>{c.currency} {c.budget}</TableCell>
-                  <TableCell>{c.targetDate}</TableCell>
+                  <TableCell>{c.mobile}</TableCell>
+                  <TableCell>{c.email}</TableCell>
+                  {/* Removed propertyType, projectType, budget, targetDate cells from client table */}
                   <TableCell>
                     <Button variant="outlined" color="primary" sx={{ mr: 1, borderRadius: 8 }} onClick={() => handleEdit(c.id)}>
                       Edit

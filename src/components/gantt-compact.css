@@ -1,0 +1,71 @@
+/* Force Gantt table cell backgrounds to olive shades */
+.gantt-task-react .gantt-table-content td {
+  background: var(--gantt-bar-bg-light, #5a6b54) !important;
+}
+.gantt-task-react .gantt-table-content tr:nth-child(even) td {
+  background: var(--gantt-bar-bg, #3d4a3a) !important;
+}
+/* Alternate Gantt table row backgrounds with olive shades */
+.gantt-task-react .gantt-table-content tr {
+  background: var(--gantt-bar-bg-light, #5a6b54) !important;
+}
+.gantt-task-react .gantt-table-content tr:nth-child(even) {
+  background: var(--gantt-bar-bg, #3d4a3a) !important;
+}
+/* Gantt chart custom colors using CSS variables */
+
+.gantt-olive-bg-light {
+  background: var(--gantt-bar-bg-light, #5a6b54) !important;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+/* Force Gantt chart canvas and bars to use theme colors */
+.gantt-task-react .gantt-container,
+.gantt-olive-bg-light .gantt-task-react .gantt-container {
+  background: var(--gantt-bar-bg-light, #5a6b54) !important;
+}
+.gantt-task-react .bar,
+.gantt-olive-bg-light .gantt-task-react .bar {
+  fill: var(--gantt-bar-green, #8bc34a) !important;
+  stroke: var(--gantt-bar-border, #8bc34a) !important;
+}
+.gantt-task-react .bar-progress,
+.gantt-olive-bg-light .gantt-task-react .bar-progress {
+  fill: var(--gantt-bar-green, #8bc34a) !important;
+}
+.gantt-task-react .bar-label,
+.gantt-olive-bg-light .gantt-task-react .bar-label {
+  fill: var(--gantt-bar-text, #f5f5dc) !important;
+}
+.gantt-task-react .bar-text,
+.gantt-olive-bg-light .gantt-task-react .bar-text {
+  fill: var(--gantt-bar-text, #f5f5dc) !important;
+}
+.gantt-task-react .gantt-table-header th,
+.gantt-olive-bg-light .gantt-task-react .gantt-table-header th {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+}
+
+:root {
+  --gantt-bar-bg: #3d4a3a;
+  --gantt-bar-bg-light: #5a6b54;
+  --gantt-bar-green: #8bc34a;
+  --gantt-bar-selected: #fbc02d;
+  --gantt-bar-border: #8bc34a;
+  --gantt-bar-text: #f5f5dc;
+}
+/* Make Gantt header font smaller and more compact */
+.gantt-table .gantt-table-header th {
+  font-size: 11px !important;
+  padding: 6px 0 2px 0 !important;
+  text-align: center !important;
+  font-weight: 500 !important;
+  background: var(--gantt-bar-bg, #3d4a3a) !important;
+  color: var(--gantt-bar-text, #f5f5dc) !important;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
