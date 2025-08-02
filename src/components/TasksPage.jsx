@@ -178,8 +178,7 @@ export default function TasksPage({ projects, tasks, onAddTask, onUpdateTask, on
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', width: '100%' }}>
-        <div style={{ width: '100%' }}>
+    <div style={{ width: '100%' }}>
         <Typography variant="h5" sx={{ mb: 2 }}>Tasks</Typography>
         <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel>Project</InputLabel>
@@ -390,35 +389,34 @@ export default function TasksPage({ projects, tasks, onAddTask, onUpdateTask, on
             </TableBody>
           </Table>
         </TableContainer>
-    </div>
-          {/* Gantt chart below the table */}
-          {showGantt && (
-            <div style={{ width: '100%' }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>Project Timeline</Typography>
-              <Paper elevation={2} sx={{ p: 2, minHeight: 400, backgroundColor: 'var(--gantt-bar-bg-light)' }}>
-                <Gantt
-                  tasks={Array.isArray(ganttTasks) ? ganttTasks.map(task => ({
-                    ...task,
-                    styles: {
-                      ...task.styles,
-                      backgroundColor: 'var(--gantt-row-bg-light)',
-                      barBackgroundColor: 'var(--gantt-row-bg-light)',
-                      textColor: 'var(--gantt-bar-text)',
-                      rowBackgroundColor: 'var(--gantt-row-bg-light)',
-                      progressColor: 'var(--gantt-bar-green)',
-                      columnBackgroundColor: 'var(--gantt-bar-bg-light)',
-                      progressSelectedColor: 'var(--gantt-bar-selected)',
-                    }
-                  })) : []}
-                  viewMode="Day"
-                  locale="en-GB"
-                  columnWidth={100}
-                  listCellWidth={150}
-                  dateColumnFormat={(date) => date.toLocaleDateString('en-US', { day: 'numeric' })}
-                />
-              </Paper>
-            </div>
-          )}
+      {/* Gantt chart below the table */}
+      {showGantt && (
+        <div style={{ width: '100%' }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>Project Timeline</Typography>
+          <Paper elevation={2} sx={{ p: 2, minHeight: 400, backgroundColor: 'var(--gantt-bar-bg-light)' }}>
+            <Gantt
+              tasks={Array.isArray(ganttTasks) ? ganttTasks.map(task => ({
+                ...task,
+                styles: {
+                  ...task.styles,
+                  backgroundColor: 'var(--gantt-row-bg-light)',
+                  barBackgroundColor: 'var(--gantt-row-bg-light)',
+                  textColor: 'var(--gantt-bar-text)',
+                  rowBackgroundColor: 'var(--gantt-row-bg-light)',
+                  progressColor: 'var(--gantt-bar-green)',
+                  columnBackgroundColor: 'var(--gantt-bar-bg-light)',
+                  progressSelectedColor: 'var(--gantt-bar-selected)',
+                }
+              })) : []}
+              viewMode="Day"
+              locale="en-GB"
+              columnWidth={100}
+              listCellWidth={150}
+              dateColumnFormat={(date) => date.toLocaleDateString('en-US', { day: 'numeric' })}
+            />
+          </Paper>
+        </div>
+      )}
     </div>
   );
 }
