@@ -178,179 +178,116 @@ export default function TasksPage({ projects, tasks, onAddTask, onUpdateTask, on
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', width: '100%' }}>
-        <div style={{ width: '100%' }}>
-        <Typography variant="h5" sx={{ mb: 2 }}>Tasks</Typography>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>Project</InputLabel>
-          <Select value={selectedProjectId} label="Project" onChange={handleProjectChange} required>
-            {openProjects.map(project => (
-              <MenuItem key={project.id} value={project.id}>
-                {project.address} ({project.state})
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {/* Toolbar for copy/paste above table header */}
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-          <Button
-            variant={showGantt ? "outlined" : "contained"}
-            color="primary"
-            size="small"
-            sx={{ mr: 1, bgcolor: showGantt ? undefined : '#e3f2fd', color: '#1565c0' }}
-            onClick={() => setShowGantt(v => !v)}
-          >
-            {showGantt ? 'Hide Gantt' : 'Show Gantt'}
-          </Button>
-          <Button
-            variant="contained"
-            color="success"
-            size="small"
-            sx={{ mr: 1, bgcolor: '#c8e6c9', color: '#256029' }}
-            disabled={!isChanged() || saveStatus === 'Saving'}
-            onClick={async () => {
-              setSaveStatus('Saving');
-              for (const task of tasksData) {
-                const { id, ...rest } = task;
-                await updateTask(id, rest);
-              }
-              setLastTasksSnapshot(tasksData.map(task => ({ ...task })));
-              setSaveStatus('Saved');
-            }}
-          >
-            Save
-          </Button>
-          <span style={{ marginRight: 16, color: saveStatus === 'Saved' ? '#388e3c' : '#fbc02d', fontWeight: 500, fontSize: 14 }}>
-            {saveStatus === 'Saved' ? 'Saved' : saveStatus === 'Saving' ? 'Saving...' : 'Unsaved changes'}
-          </span>
-          <Button
-            variant="outlined"
-            size="small"
-            sx={{ mr: 1, color: '#1565c0', borderColor: '#1565c0', bgcolor: '#e3f2fd' }}
-            onClick={() => {
-              if (selectedRows.length === tasksData.length) {
-                setSelectedRows([]);
-              } else {
-                setSelectedRows(tasksData.map(task => task.id));
-              }
-            }}
-          >
-            {selectedRows.length === tasksData.length ? 'Unselect All' : 'Select All'}
-          </Button>
-          <IconButton onClick={handleCopy} disabled={selectedRows.length === 0} sx={{ color: '#1565c0', bgcolor: '#e3f2fd', mr: 1 }}>
-            <ContentCopyIcon />
-          </IconButton>
-          <IconButton onClick={handlePaste} disabled={!clipboard} sx={{ color: '#1565c0', bgcolor: '#e3f2fd' }}>
-            <ContentPasteIcon />
-          </IconButton>
-          <span style={{ marginLeft: 12, color: '#888', fontSize: 14 }}>
-            {selectedRows.length > 0 ? `${selectedRows.length} selected` : 'Select rows to copy'}
-          </span>
-        </div>
-          <TableContainer component={Paper} style={{ minHeight: 400 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell padding="checkbox"></TableCell>
-                <TableCell>Task Name</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Due Date</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tasksData.map(task => (
-                <TableRow key={task.id} selected={selectedRows.includes(task.id)}>
-                  <TableCell padding="checkbox">
-                    <input
-                      type="checkbox"
-                      checked={selectedRows.includes(task.id)}
-                      onChange={() => handleRowSelect(task.id)}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      value={task.name}
-                      onChange={e => updateTask(task.id, { ...task, name: e.target.value })}
-                      size="small"
-                      fullWidth
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      value={task.description}
-                      onChange={e => updateTask(task.id, { ...task, description: e.target.value })}
-                      size="small"
-                      fullWidth
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      value={task.dueDate}
-                      onChange={e => updateTask(task.id, { ...task, dueDate: e.target.value })}
-                      type="date"
-                      size="small"
-                      fullWidth
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <FormControl fullWidth size="small">
-                      <Select
-                        value={task.status}
-                        onChange={e => updateTask(task.id, { ...task, status: e.target.value })}
-                      >
-                        <MenuItem value="Pending">Pending</MenuItem>
-                        <MenuItem value="In Progress">In Progress</MenuItem>
-                        <MenuItem value="Completed">Completed</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => handleDelete(task.id)} color="error"><DeleteIcon /></IconButton>
-                    <IconButton onClick={() => handleDelete(task.id)} color="error" size="small" sx={{ ml: 1 }}>-</IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {/* Quick-add row for multiple tasks */}
-              <TableRow>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    onClick={handleSubmit}
-                    disabled={!form.name}
-                  >
-                    +
-                  </Button>
+    <div style={{ width: '100%' }}>
+      <Typography variant="h5" sx={{ mb: 2 }}>Tasks</Typography>
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Project</InputLabel>
+        <Select value={selectedProjectId} label="Project" onChange={handleProjectChange} required>
+          {openProjects.map(project => (
+            <MenuItem key={project.id} value={project.id}>
+              {project.address} ({project.state})
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      {/* Toolbar for copy/paste above table header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+        <Button
+          variant={showGantt ? "outlined" : "contained"}
+          color="primary"
+          size="small"
+          sx={{ mr: 1, bgcolor: showGantt ? undefined : '#e3f2fd', color: '#1565c0' }}
+          onClick={() => setShowGantt(v => !v)}
+        >
+          {showGantt ? 'Hide Gantt' : 'Show Gantt'}
+        </Button>
+        <Button
+          variant="contained"
+          color="success"
+          size="small"
+          sx={{ mr: 1, bgcolor: '#c8e6c9', color: '#256029' }}
+          disabled={!isChanged() || saveStatus === 'Saving'}
+          onClick={async () => {
+            setSaveStatus('Saving');
+            for (const task of tasksData) {
+              const { id, ...rest } = task;
+              await updateTask(id, rest);
+            }
+            setLastTasksSnapshot(tasksData.map(task => ({ ...task })));
+            setSaveStatus('Saved');
+          }}
+        >
+          Save
+        </Button>
+        <span style={{ marginRight: 16, color: saveStatus === 'Saved' ? '#388e3c' : '#fbc02d', fontWeight: 500, fontSize: 14 }}>
+          {saveStatus === 'Saved' ? 'Saved' : saveStatus === 'Saving' ? 'Saving...' : 'Unsaved changes'}
+        </span>
+        <Button
+          variant="outlined"
+          size="small"
+          sx={{ mr: 1, color: '#1565c0', borderColor: '#1565c0', bgcolor: '#e3f2fd' }}
+          onClick={() => {
+            if (selectedRows.length === tasksData.length) {
+              setSelectedRows([]);
+            } else {
+              setSelectedRows(tasksData.map(task => task.id));
+            }
+          }}
+        >
+          {selectedRows.length === tasksData.length ? 'Unselect All' : 'Select All'}
+        </Button>
+        <IconButton onClick={handleCopy} disabled={selectedRows.length === 0} sx={{ color: '#1565c0', bgcolor: '#e3f2fd', mr: 1 }}>
+          <ContentCopyIcon />
+        </IconButton>
+        <IconButton onClick={handlePaste} disabled={!clipboard} sx={{ color: '#1565c0', bgcolor: '#e3f2fd' }}>
+          <ContentPasteIcon />
+        </IconButton>
+        <span style={{ marginLeft: 12, color: '#888', fontSize: 14 }}>
+          {selectedRows.length > 0 ? `${selectedRows.length} selected` : 'Select rows to copy'}
+        </span>
+      </div>
+      <TableContainer component={Paper} style={{ minHeight: 400 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox"></TableCell>
+              <TableCell>Task Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Due Date</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tasksData.map(task => (
+              <TableRow key={task.id} selected={selectedRows.includes(task.id)}>
+                <TableCell padding="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={selectedRows.includes(task.id)}
+                    onChange={() => handleRowSelect(task.id)}
+                  />
                 </TableCell>
                 <TableCell>
                   <TextField
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="Task Name"
+                    value={task.name}
+                    onChange={e => updateTask(task.id, { ...task, name: e.target.value })}
                     size="small"
                     fullWidth
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
-                    name="description"
-                    value={form.description}
-                    onChange={handleChange}
-                    placeholder="Description"
+                    value={task.description}
+                    onChange={e => updateTask(task.id, { ...task, description: e.target.value })}
                     size="small"
                     fullWidth
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
-                    name="dueDate"
-                    value={form.dueDate}
-                    onChange={handleChange}
+                    value={task.dueDate}
+                    onChange={e => updateTask(task.id, { ...task, dueDate: e.target.value })}
                     type="date"
                     size="small"
                     fullWidth
@@ -360,9 +297,8 @@ export default function TasksPage({ projects, tasks, onAddTask, onUpdateTask, on
                 <TableCell>
                   <FormControl fullWidth size="small">
                     <Select
-                      name="status"
-                      value={form.status}
-                      onChange={handleChange}
+                      value={task.status}
+                      onChange={e => updateTask(task.id, { ...task, status: e.target.value })}
                     >
                       <MenuItem value="Pending">Pending</MenuItem>
                       <MenuItem value="In Progress">In Progress</MenuItem>
@@ -371,69 +307,116 @@ export default function TasksPage({ projects, tasks, onAddTask, onUpdateTask, on
                   </FormControl>
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    onClick={handleSubmit}
-                    disabled={!form.name}
-                  >
-                    Add
-                  </Button>
-                  {editingId && (
-                    <Button variant="text" color="secondary" size="small" sx={{ ml: 1 }} onClick={() => { setEditingId(null); setForm({ name: '', description: '', dueDate: '', status: 'Pending', projectId: selectedProjectId }); }}>
-                      Cancel
-                    </Button>
-                  )}
+                  <IconButton onClick={() => handleDelete(task.id)} color="error"><DeleteIcon /></IconButton>
+                  <IconButton onClick={() => handleDelete(task.id)} color="error" size="small" sx={{ ml: 1 }}>-</IconButton>
                 </TableCell>
               </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-          {/* Gantt chart below the table */}
-          {showGantt && (
-            <div style={{ width: '100%', marginTop: 32 }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>Project Timeline</Typography>
-              <Paper elevation={2} sx={{ p: 2, bgcolor: '#f5f5f5' }} style={{ minHeight: 400 }}>
-                <div className="gantt-olive-bg-light">
-                  <Gantt
-                    tasks={Array.isArray(ganttTasks) ? ganttTasks.map(task => ({
-                      ...task,
-                      styles: {
-                        progressColor: 'var(--gantt-bar-green)',
-                        progressSelectedColor: 'var(--gantt-bar-selected)',
-                        barBackgroundColor: 'var(--gantt-bar-bg-light)',
-                        barBorderColor: 'var(--gantt-bar-border)',
-                        backgroundColor: 'var(--gantt-bar-bg-light)',
-                        textColor: 'var(--gantt-bar-text)'
-                      }
-                    })) : []}
-                    viewMode="Day"
-                    locale="en-GB"
-                    columnWidth={40}
-                    listCellWidth={80}
-                  />
-                </div>
-              </Paper>
-            </div>
-          )}
-      </div>
-          {/* Gantt chart below the table */}
-          {showGantt && (
-            <div style={{ width: '100%', marginTop: 32 }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>Project Timeline</Typography>
-              <Paper elevation={2} sx={{ p: 2, minHeight: 400, backgroundColor: 'var(--gantt-bar-bg-light)' }}>
-                <Gantt
-                  tasks={Array.isArray(ganttTasks) ? ganttTasks : []}
-                  viewMode="Day"
-                  locale="en-GB"
-                  columnWidth={100}
-                  listCellWidth={150}
-                  dateColumnFormat={(date) => date.getDate()}
+            ))}
+            {/* Quick-add row for multiple tasks */}
+            <TableRow>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  onClick={handleSubmit}
+                  disabled={!form.name}
+                >
+                  +
+                </Button>
+              </TableCell>
+              <TableCell>
+                <TextField
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Task Name"
+                  size="small"
+                  fullWidth
                 />
-              </Paper>
-            </div>
-          )}
+              </TableCell>
+              <TableCell>
+                <TextField
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="Description"
+                  size="small"
+                  fullWidth
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  name="dueDate"
+                  value={form.dueDate}
+                  onChange={handleChange}
+                  type="date"
+                  size="small"
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                />
+              </TableCell>
+              <TableCell>
+                <FormControl fullWidth size="small">
+                  <Select
+                    name="status"
+                    value={form.status}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="Pending">Pending</MenuItem>
+                    <MenuItem value="In Progress">In Progress</MenuItem>
+                    <MenuItem value="Completed">Completed</MenuItem>
+                  </Select>
+                </FormControl>
+              </TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  onClick={handleSubmit}
+                  disabled={!form.name}
+                >
+                  Add
+                </Button>
+                {editingId && (
+                  <Button variant="text" color="secondary" size="small" sx={{ ml: 1 }} onClick={() => { setEditingId(null); setForm({ name: '', description: '', dueDate: '', status: 'Pending', projectId: selectedProjectId }); }}>
+                    Cancel
+                  </Button>
+                )}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {/* Gantt chart below the table */}
+      {showGantt && (
+        <div style={{ width: '100%' }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>Project Timeline</Typography>
+          <Paper elevation={2} sx={{ p: 2, minHeight: 400, backgroundColor: 'var(--gantt-bar-bg-light)' }}>
+            <Gantt
+              tasks={Array.isArray(ganttTasks) ? ganttTasks.map(task => ({
+                ...task,
+                styles: {
+                  ...task.styles,
+                  backgroundColor: 'var(--gantt-row-bg-light)',
+                  barBackgroundColor: 'var(--gantt-row-bg-light)',
+                  textColor: 'var(--gantt-bar-text)',
+                  rowBackgroundColor: 'var(--gantt-row-bg-light)',
+                  progressColor: 'var(--gantt-bar-green)',
+                  columnBackgroundColor: 'var(--gantt-bar-bg-light)',
+                  progressSelectedColor: 'var(--gantt-bar-selected)',
+                }
+              })) : []}
+              viewMode="Day"
+              locale="en-GB"
+              columnWidth={100}
+              listCellWidth={150}
+              dateColumnFormat={(date) => date.toLocaleDateString('en-US', { day: 'numeric' })}
+            />
+          </Paper>
+        </div>
+      )}
     </div>
   );
 }
